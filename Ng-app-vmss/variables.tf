@@ -17,20 +17,12 @@ variable "image_id" {
   description = "The Custom image ID"
 }
 variable "location" {
-  description = "The Custom image ID"
+  description = "The region which the resource is deployed"
 }
-#variable "bastion_host_resource_group" {
-#  description = "The Custom image ID"
-#}
-#variable "bastion_host_subnet_id" {
-#  description = "The Custom image ID"
-#}
-# variable "key_file_location" {
-#   description = "The Public Key location"
-# }
-# variable "admin_username" {
-#   description = "The VM Secret"
-# }
-# variable "admin_password" {
-#   description = "The VM Secret"
-# }
+variable "application_port" {
+  default = 80
+  description = "The LB port where the application is configured"
+}
+variable "subnet_id" {
+  description = "The subnet ID in which the resources needs to be deployed"
+}
