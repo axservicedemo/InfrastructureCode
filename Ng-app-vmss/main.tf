@@ -6,10 +6,10 @@ provider "azurerm" {
   features {}
 }
 
-data "azurerm_image" "search" {
-  name                = var.image_name
-  resource_group_name = "EssilorDemoNetworkRG"
-}
+# data "azurerm_image" "search" {
+#   name                = var.image_name
+#   resource_group_name = var.predefined_image_rg
+# }
 
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
@@ -84,13 +84,13 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                = "${var.prefix}-vm"
   location            = var.location
   resource_group_name = "${var.prefix}-resources"
-  sku                 = "Standard_F2"
+  sku                 = "Standard_A0"
   instances           = 2
   admin_username       = "adminuser"
   admin_password       = "password@123"
   disable_password_authentication = false
 
-  source_image_id = data.azurerm_image.search.id
+  source_image_id = "/subscriptions/e6139af9-7952-444a-bef0-82110bcd6db5/resourceGroups/EssilorDemoNetworkRG/providers/Microsoft.Network/virtualNetworks/defaultvnet/subnets/vm-subnet1"
 
   os_disk {
     storage_account_type = "Standard_LRS"
