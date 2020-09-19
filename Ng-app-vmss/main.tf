@@ -90,7 +90,8 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   admin_password       = "password@123"
   disable_password_authentication = false
 
-  source_image_id = "/subscriptions/e6139af9-7952-444a-bef0-82110bcd6db5/resourceGroups/EssilorDemoNetworkRG/providers/Microsoft.Network/virtualNetworks/defaultvnet/subnets/vm-subnet1"
+
+  source_image_id = "/subscriptions/e6139af9-7952-444a-bef0-82110bcd6db5/resourceGroups/EssilorDemoNetworkRG/providers/Microsoft.Compute/images/demo-centos-image-18-09-2020"
 
   os_disk {
     storage_account_type = "Standard_LRS"
