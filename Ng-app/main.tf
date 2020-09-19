@@ -8,21 +8,12 @@ provider "azurerm" {
 
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
-  location = "East US"
+  location = var.location
 }
 
-resource "azurerm_virtual_network" "main" {
-  name                = "${var.prefix}-network"
-  address_space       = ["10.0.0.0/16"]
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-}
-
-resource "azurerm_subnet" "internal" {
-  name                 = "internal"
-  resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = ["10.0.2.0/24"]
+data "azurerm_image" "search" {
+  name                = var.image_name
+  resource_group_name = var.resources_predefined_rg
 }
 
 resource "azurerm_public_ip" "main" {
@@ -39,7 +30,7 @@ resource "azurerm_network_interface" "main" {
 
   ip_configuration {
     name                          = "internal"
-    subnet_id                     = azurerm_subnet.internal.id
+    subnet_id                     = var.subnet_id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.main.id
   }
@@ -53,7 +44,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   admin_username                  = "adminuser"
   admin_password                  = "password@123"
   #### Custom Image #####
-  source_image_id = var.image_id
+  source_image_id = data.azurerm_image.search.id
   #######################
   disable_password_authentication = false
   network_interface_ids = [
