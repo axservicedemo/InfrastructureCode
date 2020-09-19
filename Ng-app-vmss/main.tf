@@ -6,6 +6,11 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_image" "search" {
+  name                = var.image_name
+  resource_group_name = "EssilorDemoNetworkRG"
+}
+
 resource "azurerm_resource_group" "main" {
   name     = "${var.prefix}-resources"
   location = var.location
@@ -85,7 +90,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   admin_password       = "password@123"
   disable_password_authentication = false
 
-  source_image_id = var.image_id
+  source_image_id = data.azurerm_image.search.id
 
   os_disk {
     storage_account_type = "Standard_LRS"
