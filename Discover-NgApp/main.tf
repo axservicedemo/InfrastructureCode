@@ -117,3 +117,10 @@ output "disk_size_in_gb" {
   value = azurerm_managed_disk.example.disk_size_gb
 }
 
+output "operating_system" {
+  value = "Linux"
+}
+
+output "scaleset" {
+  value = "False"
+}
