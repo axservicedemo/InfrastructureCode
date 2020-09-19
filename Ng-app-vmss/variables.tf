@@ -27,6 +27,6 @@ variable "application_port" {
 variable "subnet_id" {
   description = "The subnet ID in which the resources needs to be deployed"
 }
-variable "resources_predefined_rg" {
-  description = "The resource group where the images has be located"
-}
+# variable "resources_predefined_rg" {
+#   description = "The resource group where the images has be located"
+# }
