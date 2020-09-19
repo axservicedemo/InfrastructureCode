@@ -12,7 +12,7 @@ resource "azurerm_linux_virtual_machine" "main" {
     priority                        = "Regular"
     provision_vm_agent              = true
     resource_group_name             = azurerm_resource_group.main.name
-    size                            = "Standard_F1"
+    size                            = "Standard_A0"
     source_image_id                 = "/subscriptions/e6139af9-7952-444a-bef0-82110bcd6db5/resourceGroups/director-cp/providers/Microsoft.Compute/images/demo-centos-image-11-09-2020"
 
     os_disk {
