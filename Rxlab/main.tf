@@ -20,7 +20,7 @@ resource "azurerm_windows_virtual_machine_scale_set" "main" {
   name                = "${var.prefix}"
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
-  sku                 = "Standard_F1"
+  sku                 = "Standard_F2"
   instances           = 2
   admin_password      = "P@ssw0rd1234!"
   admin_username      = "adminuser"
