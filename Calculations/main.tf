@@ -40,7 +40,7 @@ resource "azurerm_windows_virtual_machine" "main" {
   name                            = "${var.prefix}-vm"
   resource_group_name             = azurerm_resource_group.main.name
   location                        = azurerm_resource_group.main.location
-  size                            = "Standard_F1"
+  size                            = "Standard_F2"
   admin_username                  = "adminuser"
   admin_password                  = "P@ssw0rd1234!"
   source_image_id                 =  data.azurerm_image.search.id
