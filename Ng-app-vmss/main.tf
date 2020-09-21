@@ -32,7 +32,7 @@ resource "azurerm_network_security_group" "vmss" {
     destination_port_range = var.application_port
     protocol = "TCP"
   }
-
+  depends_on = [azurerm_resource_group.main]
 }
 
 resource "azurerm_public_ip" "vmss" {
@@ -41,6 +41,7 @@ resource "azurerm_public_ip" "vmss" {
   resource_group_name          = "${var.prefix}-resources"
   allocation_method = "Static"
   sku = "Standard"
+  depends_on = [azurerm_resource_group.main]
 }
 
 resource "azurerm_lb" "vmss" {
@@ -53,12 +54,14 @@ resource "azurerm_lb" "vmss" {
     name                 = "PublicIPAddress"
     public_ip_address_id = azurerm_public_ip.vmss.id
   }
+  depends_on = [azurerm_public_ip.vmss]
 }
 
 resource "azurerm_lb_backend_address_pool" "bpepool" {
   resource_group_name = "${var.prefix}-resources"
   loadbalancer_id     = azurerm_lb.vmss.id
   name                = "BackEndAddressPool"
+  depends_on = [azurerm_lb.vmss]
 }
 
 resource "azurerm_lb_probe" "vmss" {
@@ -84,7 +87,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                = "${var.prefix}-vm"
   location            = var.location
   resource_group_name = "${var.prefix}-resources"
-  sku                 = "Standard_A0"
+  sku                 = "Standard_F1"
   instances           = 2
   admin_username       = "adminuser"
   admin_password       = "password@123"
@@ -101,7 +104,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
     lun           = 0
-    disk_size_gb  = 10
+    disk_size_gb  = 5
   }
 
   network_interface {
@@ -115,6 +118,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
       primary = true
     }
   }
+  depends_on = [azurerm_linux_virtual_machine_scale_set.vmss]
 }
 
 output "name" {
