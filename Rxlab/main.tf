@@ -20,12 +20,12 @@ resource "azurerm_windows_virtual_machine_scale_set" "main" {
   name                = "${var.prefix}"
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
-  sku                 = "Standard_F2"
+  sku                 = "Standard_F1"
   instances           = 2
   admin_password      = "P@ssw0rd1234!"
   admin_username      = "adminuser"
+  upgrade_mode = "Automatic"
   source_image_id     = data.azurerm_image.search.id
-  upgrade_mode        = "Automatic"
 
   os_disk {
     storage_account_type = "Standard_LRS"
