@@ -87,7 +87,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                = "${var.prefix}-vm"
   location            = var.location
   resource_group_name = "${var.prefix}-resources"
-  sku                 = "Standard_F1"
+  sku                 = "Standard_A1"
   instances           = 2
   admin_username       = "adminuser"
   admin_password       = "password@123"
