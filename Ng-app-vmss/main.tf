@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "main" {
 resource "azurerm_network_security_group" "vmss" {
   name     = "${var.prefix}-nsg"
   location = var.location
-  resource_group_name = "${var.prefix}-resources"
+  resource_group_name = azurerm_resource_group.main
 
   security_rule {
     name = "port_${var.application_port}"
@@ -32,47 +32,43 @@ resource "azurerm_network_security_group" "vmss" {
     destination_port_range = var.application_port
     protocol = "TCP"
   }
-  depends_on = [azurerm_resource_group.main]
 }
 
 resource "azurerm_public_ip" "vmss" {
   name                         = "${var.prefix}-public-ip"
   location                     = var.location
-  resource_group_name          = "${var.prefix}-resources"
+  resource_group_name          = azurerm_resource_group.main
   allocation_method = "Static"
   sku = "Standard"
-  depends_on = [azurerm_resource_group.main]
 }
 
 resource "azurerm_lb" "vmss" {
   name                = "${var.prefix}-lb"
   location            = var.location
-  resource_group_name = "${var.prefix}-resources"
+  resource_group_name = azurerm_resource_group.main
   sku = "Standard"
 
   frontend_ip_configuration {
     name                 = "PublicIPAddress"
     public_ip_address_id = azurerm_public_ip.vmss.id
   }
-  depends_on = [azurerm_public_ip.vmss]
 }
 
 resource "azurerm_lb_backend_address_pool" "bpepool" {
-  resource_group_name = "${var.prefix}-resources"
+  resource_group_name = azurerm_resource_group.main
   loadbalancer_id     = azurerm_lb.vmss.id
   name                = "BackEndAddressPool"
-  depends_on = [azurerm_lb.vmss]
 }
 
 resource "azurerm_lb_probe" "vmss" {
-  resource_group_name = "${var.prefix}-resources"
+  resource_group_name = azurerm_resource_group.main
   loadbalancer_id     = azurerm_lb.vmss.id
   name                = "ssh-running-probe"
   port                = var.application_port
 }
 
 resource "azurerm_lb_rule" "lbnatrule" {
-  resource_group_name            = "${var.prefix}-resources"
+  resource_group_name            = azurerm_resource_group.main
   loadbalancer_id                = azurerm_lb.vmss.id
   name                           = "http"
   protocol                       = "Tcp"
@@ -84,9 +80,9 @@ resource "azurerm_lb_rule" "lbnatrule" {
 }
 
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
-  name                = "${var.prefix}-vm"
+  name                = "${var.prefix}-vmss"
   location            = var.location
-  resource_group_name = "${var.prefix}-resources"
+  resource_group_name = azurerm_resource_group.main
   sku                 = "Standard_A1"
   instances           = 2
   admin_username       = "adminuser"
@@ -104,7 +100,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
     lun           = 0
-    disk_size_gb  = 10
+    disk_size_gb  = 5
   }
 
   network_interface {
@@ -118,7 +114,6 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
       primary = true
     }
   }
-  depends_on = [azurerm_linux_virtual_machine_scale_set.vmss]
 }
 
 output "name" {
