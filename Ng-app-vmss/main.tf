@@ -88,6 +88,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   admin_username       = "adminuser"
   admin_password       = "password@123"
   disable_password_authentication = false
+  upgrade_mode = "Rolling"
 
   source_image_id = data.azurerm_image.search.id
 
