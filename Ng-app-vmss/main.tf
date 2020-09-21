@@ -19,7 +19,7 @@ resource "azurerm_resource_group" "main" {
 resource "azurerm_network_security_group" "vmss" {
   name     = "${var.prefix}-nsg"
   location = var.location
-  resource_group_name = azurerm_resource_group.main
+  resource_group_name = azurerm_resource_group.main.name
 
   security_rule {
     name = "port_${var.application_port}"
@@ -37,7 +37,7 @@ resource "azurerm_network_security_group" "vmss" {
 resource "azurerm_public_ip" "vmss" {
   name                         = "${var.prefix}-public-ip"
   location                     = var.location
-  resource_group_name          = azurerm_resource_group.main
+  resource_group_name          = azurerm_resource_group.main.name
   allocation_method = "Static"
   sku = "Standard"
 }
@@ -45,7 +45,7 @@ resource "azurerm_public_ip" "vmss" {
 resource "azurerm_lb" "vmss" {
   name                = "${var.prefix}-lb"
   location            = var.location
-  resource_group_name = azurerm_resource_group.main
+  resource_group_name = azurerm_resource_group.main.name
   sku = "Standard"
 
   frontend_ip_configuration {
@@ -55,20 +55,20 @@ resource "azurerm_lb" "vmss" {
 }
 
 resource "azurerm_lb_backend_address_pool" "bpepool" {
-  resource_group_name = azurerm_resource_group.main
+  resource_group_name = azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.vmss.id
   name                = "BackEndAddressPool"
 }
 
 resource "azurerm_lb_probe" "vmss" {
-  resource_group_name = azurerm_resource_group.main
+  resource_group_name = azurerm_resource_group.main.name
   loadbalancer_id     = azurerm_lb.vmss.id
   name                = "ssh-running-probe"
   port                = var.application_port
 }
 
 resource "azurerm_lb_rule" "lbnatrule" {
-  resource_group_name            = azurerm_resource_group.main
+  resource_group_name            = azurerm_resource_group.main.name
   loadbalancer_id                = azurerm_lb.vmss.id
   name                           = "http"
   protocol                       = "Tcp"
@@ -82,7 +82,7 @@ resource "azurerm_lb_rule" "lbnatrule" {
 resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
   name                = "${var.prefix}-vmss"
   location            = var.location
-  resource_group_name = azurerm_resource_group.main
+  resource_group_name = azurerm_resource_group.main.name
   sku                 = "Standard_A1"
   instances           = 2
   admin_username       = "adminuser"
