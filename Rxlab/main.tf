@@ -17,7 +17,7 @@ resource "azurerm_resource_group" "main" {
 }
 
 resource "azurerm_windows_virtual_machine_scale_set" "main" {
-  name                = "${var.prefix}-vm"
+  name                = "${var.prefix}"
   location            = var.location
   resource_group_name = azurerm_resource_group.main.name
   sku                 = "Standard_F1"
