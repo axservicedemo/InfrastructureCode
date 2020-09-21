@@ -104,7 +104,7 @@ resource "azurerm_linux_virtual_machine_scale_set" "vmss" {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
     lun           = 0
-    disk_size_gb  = 5
+    disk_size_gb  = 10
   }
 
   network_interface {
