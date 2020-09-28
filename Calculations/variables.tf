@@ -1,5 +1,6 @@
 variable "prefix" {
-  description = "The prefix which should be used for all resources in this example"
+  description = "The prefix which should be used for all resources in this example"i
+  default = "Test"
 }
 variable "subscription_id" {
   description = "The Azure Secret"
